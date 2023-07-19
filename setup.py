@@ -6,7 +6,7 @@ from setuptools import find_namespace_packages, setup
 
 spec = importlib.util.spec_from_file_location(
     "blueetl_core.version",
-    "blueetl_core/version.py",
+    "src/blueetl_core/version.py",
 )
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
@@ -26,7 +26,12 @@ setup(
         "Source": "git@bbpgitlab.epfl.ch:nse/blueetl-core.git",
     },
     license="BBP-internal-confidential",
-    install_requires=[],
+    install_requires=[
+        "numpy>=1.19.4",
+        "pandas>=1.3.0",
+        "joblib>=1.3.1",
+        "packaging>=21.3",
+    ],
     packages=find_namespace_packages(where="src"),
     package_dir={"": "src"},
     include_package_data=True,
