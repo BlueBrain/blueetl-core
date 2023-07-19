@@ -9,6 +9,24 @@ from pandas.testing import assert_frame_equal, assert_series_equal
 from blueetl_core import utils as test_module
 
 
+@pytest.mark.parametrize(
+    "x, expected",
+    [
+        ([], []),
+        ((), []),
+        (None, [None]),
+        ("", [""]),
+        ("a", ["a"]),
+        (["a"], ["a"]),
+        (("a",), ["a"]),
+        ({"a": 1}, [{"a": 1}]),
+    ],
+)
+def test_ensure_list(x, expected):
+    result = test_module.ensure_list(x)
+    assert result == expected
+
+
 def test_andor_mask():
     query_list = [
         {"col1": 10},  # select row 1
