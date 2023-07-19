@@ -1,0 +1,13 @@
+[tool.black]
+line-length = 100
+target-version = [
+    'py37',
+    'py38',
+    'py39',
+    'py310',
+]
+include = 'blueetl_core\/.*\.py$|tests\/.*\.py$|doc\/source\/conf\.py$|setup\.py$'
+
+[tool.isort]
+profile = "black"
+line_length = 100
