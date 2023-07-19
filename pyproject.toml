@@ -1,13 +1,46 @@
 [tool.black]
 line-length = 100
-target-version = [
-    'py37',
-    'py38',
-    'py39',
-    'py310',
-]
+target-version = ['py39']
 include = 'blueetl_core\/.*\.py$|tests\/.*\.py$|doc\/source\/conf\.py$|setup\.py$'
 
 [tool.isort]
 profile = "black"
 line_length = 100
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+select = [
+    "D", # pydocstyle
+    "E", # pycodestyle
+    "F", # pyflakes
+    "UP", # pyupgrade
+]
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning:nptyping",
+]
+log_level = "DEBUG"
+
+
+[tool.coverage.paths]
+source = [
+    "src",
+    "*/site-packages",
+]
+
+[tool.coverage.run]
+branch = true
+parallel = false
+
+[tool.coverage.report]
+show_missing = true
+precision = 0
+fail_under = 80
