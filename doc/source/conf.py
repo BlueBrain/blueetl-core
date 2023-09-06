@@ -33,7 +33,11 @@ release = version
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = []
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.napoleon",
+]
 
 # Add any paths that contain templates here, relative to this directory.
 # templates_path = ['_templates']
@@ -64,3 +68,14 @@ html_title = "blueetl-core"
 
 # If true, links to the reST sources are added to the pages.
 html_show_sourcelink = False
+
+# autodoc settings
+autodoc_default_options = {
+    "members": True,
+    "show-inheritance": True,
+}
+autoclass_content = "both"
+autodoc_mock_imports = []
+
+# autosummary settings
+autosummary_generate = True
