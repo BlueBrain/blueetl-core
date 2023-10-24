@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.1.3
+-------------
+
+Bug fixes
+~~~~~~~~~
+
+- Ignore ``skip_empty`` in ``utils.smart_concat()`` when all the DataFrames are empty.
+
 Version 0.1.2
 -------------
 

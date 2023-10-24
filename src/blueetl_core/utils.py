@@ -228,8 +228,8 @@ def smart_concat(iterable, *, keys=None, copy=False, skip_empty=True, **kwargs):
             hierarchical index using the passed keys as the outermost level.
         copy: passed to pd.concat. If the original data can be used without making a copy, then
             it can be set to False.
-        skip_empty: if True, empty objects are skipped. If False, they are passed to pd.concat,
-            and the result depends on the behaviour of the Pandas version.
+        skip_empty: if True, empty objects are skipped, unless they are all empty. If False, they
+            are all passed to pd.concat, and the result may depend on the Pandas version.
             Note that in the latter case, you may see a FutureWarning with Pandas 2:
 
                 FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries
@@ -297,12 +297,10 @@ def smart_concat(iterable, *, keys=None, copy=False, skip_empty=True, **kwargs):
         mapping = iterable
         keys = keys if keys is not None else mapping.keys()
         iterable = (mapping[key] for key in keys)
-    return pd.concat(
-        (_ordered(obj) for obj in iterable if not skip_empty or not obj.empty),
-        keys=keys,
-        copy=copy,
-        **kwargs,
-    )
+    objects = [_ordered(obj) for obj in iterable]
+    if skip_empty and not all(obj.empty for obj in objects):
+        objects = [obj for obj in objects if not obj.empty]
+    return pd.concat(objects, keys=keys, copy=copy, **kwargs)
 
 
 def concat_tuples(iterable, *args, **kwargs):

@@ -272,7 +272,15 @@ def test_smart_concat_some_empty_series(series1):
     obj1 = series1.astype(np.int32)
     obj2 = series1.astype(np.float32).iloc[:0]
     iterable = [obj1, obj2]
-    result = test_module.smart_concat(iterable)
+    result = test_module.smart_concat(iterable, skip_empty=True)
+    assert_series_equal(result, obj1)
+
+
+def test_smart_concat_all_empty_series(series1):
+    obj1 = series1.astype(np.int32).iloc[:0]
+    obj2 = series1.astype(np.int16).iloc[:0]
+    iterable = [obj1, obj2]
+    result = test_module.smart_concat(iterable, skip_empty=True)
     assert_series_equal(result, obj1)
 
 
@@ -382,7 +390,15 @@ def test_smart_concat_some_empty_dataframes(dataframe1):
     obj1 = dataframe1.astype({"v0": np.int32})
     obj2 = dataframe1.astype({"v0": np.float32}).iloc[:0]
     iterable = [obj1, obj2]
-    result = test_module.smart_concat(iterable)
+    result = test_module.smart_concat(iterable, skip_empty=True)
+    assert_frame_equal(result, obj1)
+
+
+def test_smart_concat_all_empty_dataframes(dataframe1):
+    obj1 = dataframe1.astype({"v0": np.int32}).iloc[:0]
+    obj2 = dataframe1.astype({"v0": np.int16}).iloc[:0]
+    iterable = [obj1, obj2]
+    result = test_module.smart_concat(iterable, skip_empty=True)
     assert_frame_equal(result, obj1)
 
 
