@@ -268,6 +268,14 @@ def test_smart_concat_series_having_indexes_with_different_number_of_levels(seri
         test_module.smart_concat({"e": obj1, "f": obj2})
 
 
+def test_smart_concat_some_empty_series(series1):
+    obj1 = series1.astype(np.int32)
+    obj2 = series1.astype(np.float32).iloc[:0]
+    iterable = [obj1, obj2]
+    result = test_module.smart_concat(iterable)
+    assert_series_equal(result, obj1)
+
+
 def test_smart_concat_dataframes(dataframe1):
     obj1 = dataframe1.copy() + 1
     obj2 = dataframe1.copy() + 2
@@ -368,6 +376,14 @@ def test_smart_concat_dataframes_having_indexes_with_different_number_of_levels(
         test_module.smart_concat(iterable)
     with pytest.raises(RuntimeError, match=match):
         test_module.smart_concat({"e": obj1, "f": obj2})
+
+
+def test_smart_concat_some_empty_dataframes(dataframe1):
+    obj1 = dataframe1.astype({"v0": np.int32})
+    obj2 = dataframe1.astype({"v0": np.float32}).iloc[:0]
+    iterable = [obj1, obj2]
+    result = test_module.smart_concat(iterable)
+    assert_frame_equal(result, obj1)
 
 
 @pytest.mark.parametrize(

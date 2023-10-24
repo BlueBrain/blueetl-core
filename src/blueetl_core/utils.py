@@ -210,12 +210,12 @@ def is_subfilter(left: dict, right: dict) -> bool:
     return True
 
 
-def smart_concat(iterable, *, keys=None, copy=False, **kwargs):
+def smart_concat(iterable, *, keys=None, copy=False, skip_empty=True, **kwargs):
     """Build and return a Series or a Dataframe from an iterable of objects with the same index.
 
-    This is similar to ``pd.concat``, but the result is consistent when the levels of the indexes
-    are ordered differently, while ``pd.concat`` would blindly concatenate the indexes, ignoring
-    and removing the names of the levels.
+    This is similar to ``pd.concat``, but the result is consistent even when the levels of the
+    indexes are ordered differently, while ``pd.concat`` would blindly concatenate the indexes,
+    ignoring and removing the names of the levels.
 
     Moreover, it uses ``copy=False`` by default, that's safe only if the original data isn't going
     to change, but it's more efficient, especially when concatenating a single item.
@@ -228,6 +228,14 @@ def smart_concat(iterable, *, keys=None, copy=False, **kwargs):
             hierarchical index using the passed keys as the outermost level.
         copy: passed to pd.concat. If the original data can be used without making a copy, then
             it can be set to False.
+        skip_empty: if True, empty objects are skipped. If False, they are passed to pd.concat,
+            and the result depends on the behaviour of the Pandas version.
+            Note that in the latter case, you may see a FutureWarning with Pandas 2:
+
+                FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries
+                is deprecated. In a future version, this will no longer exclude empty or all-NA
+                columns when determining the result dtypes. To retain the old behavior, exclude the
+                relevant entries before the concat operation.
         kwargs: other keyword arguments to be passed to pd.concat
 
     Returns:
@@ -289,7 +297,12 @@ def smart_concat(iterable, *, keys=None, copy=False, **kwargs):
         mapping = iterable
         keys = keys if keys is not None else mapping.keys()
         iterable = (mapping[key] for key in keys)
-    return pd.concat((_ordered(obj) for obj in iterable), keys=keys, copy=copy, **kwargs)
+    return pd.concat(
+        (_ordered(obj) for obj in iterable if not skip_empty or not obj.empty),
+        keys=keys,
+        copy=copy,
+        **kwargs,
+    )
 
 
 def concat_tuples(iterable, *args, **kwargs):

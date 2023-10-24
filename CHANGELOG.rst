@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.1.2
+-------------
+
+Improvements
+~~~~~~~~~~~~
+
+- Use ``skip_empty=True`` by default in ``utils.smart_concat()``.
+
 Version 0.1.1
 -------------
 
