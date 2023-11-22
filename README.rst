@@ -17,7 +17,6 @@ Installation
 
 ``BlueETL-core`` can be installed independently from ``BlueETL`` with::
 
-    PIP_INDEX_URL=https://bbpteam.epfl.ch/repository/devpi/simple \
     pip install -U blueetl-core
 
 
