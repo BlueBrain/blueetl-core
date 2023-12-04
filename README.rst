@@ -1,7 +1,11 @@
+|banner|
+
+|build_status| |license| |coverage| |docs| |DOI|
+
 blueetl-core
 ============
 
-Core transformations for BlueETL
+Core transformations for BlueETL.
 
 
 Introduction
@@ -9,7 +13,7 @@ Introduction
 
 ``BlueETL-core`` automatically registers Pandas accessors using the ``.etl`` namespace, that can be useful to simplify some recurring operations on Pandas DataFrames, Series, and Indexes.
 
-It provides the core transformations used by `BlueETL <https://bbpteam.epfl.ch/documentation/projects/blueetl/latest/index.html>`__, a package that can help analyse multiple simulations in a Simulation Campaign.
+It provides the core transformations used by `BlueETL <https://github.com/BlueBrain/blueetl>`__, a package that can help analyse multiple simulations in a Simulation Campaign.
 
 
 Installation
@@ -20,8 +24,8 @@ Installation
     pip install -U blueetl-core
 
 
-Usage
------
+Examples
+--------
 
 To use the Core Transformations provided by the ``.etl`` accessor with any Pandas DataFrame or Series, it's enough to import BlueETL or BlueETL-core, and call the desired methods.
 
@@ -36,12 +40,53 @@ For example:
     df = pd.DataFrame({"a": [0, 1, 2], "b": [3, 4, 5]})
     df = df.etl.q(a=1)
 
-See `this Jupyter notebook <https://bbpteam.epfl.ch/documentation/projects/blueetl/latest/notebooks/01_core_transformations.html>`__ for more information and examples.
+See `this Jupyter notebook <https://blueetl.readthedocs.io/en/stable/notebooks/01_core_transformations.html>`__ for more information and examples.
 
 
-Reporting issues
-----------------
+Contribution Guidelines
+-----------------------
 
-``BlueETL-core`` is maintained by the BlueBrain NSE team.
+See `<CONTRIBUTING.rst>`__.
 
-Should you face any issue with using it, please submit a ticket to our `issue tracker <https://bbpteam.epfl.ch/project/issues/browse/NSETM>`__.
+
+Citation
+--------
+
+When you use this software, we kindly ask you to cite the following DOI:
+
+.. image:: https://zenodo.org/badge/xxxxxxxx.svg
+   :target: https://zenodo.org/badge/latestdoi/xxxxxxxx
+
+
+Acknowledgment
+--------------
+
+The development of this software was supported by funding to the Blue Brain Project, a research center of the École polytechnique fédérale de Lausanne (EPFL), from the Swiss government’s ETH Board of the Swiss Federal Institutes of Technology.
+
+For license and authors, see `<LICENSE.txt>`__ and `<AUTHORS.txt>`__ respectively.
+
+Copyright © 2023 Blue Brain Project/EPFL
+
+
+.. |build_status| image:: https://github.com/BlueBrain/blueetl-core/actions/workflows/run-tox.yml/badge.svg
+   :alt: Build Status
+
+.. |license| image:: https://img.shields.io/pypi/l/blueetl-core
+   :target: https://github.com/BlueBrain/blueetl-core/blob/main/LICENSE.txt
+   :alt: License
+
+.. |coverage| image:: https://codecov.io/github/BlueBrain/blueetl-core/coverage.svg?branch=main
+   :target: https://codecov.io/github/BlueBrain/blueetl-core?branch=main
+   :alt: codecov.io
+
+.. |docs| image:: https://readthedocs.org/projects/blueetl-core/badge/?version=latest
+   :target: https://blueetl-core.readthedocs.io/
+   :alt: documentation status
+
+.. |DOI| image:: https://zenodo.org/badge/DOI/xxx/zenodo.yyy.svg
+   :target: https://doi.org/xxx/zenodo.yyy
+   :alt: DOI
+
+.. local-substitutions
+
+.. |banner| image:: doc/source/_images/BlueETL.jpeg
