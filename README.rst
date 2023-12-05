@@ -89,4 +89,4 @@ Copyright © 2023 Blue Brain Project/EPFL
 
 .. local-substitutions
 
-.. |banner| image:: doc/source/_images/BlueETL.jpeg
+.. |banner| image:: https://raw.githubusercontent.com/BlueBrain/blueetl-core/main/doc/source/_images/BlueETL.jpeg
