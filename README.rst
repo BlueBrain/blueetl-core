@@ -1,6 +1,6 @@
 |banner|
 
-|build_status| |license| |coverage| |docs| |DOI|
+|build_status| |license| |coverage| |docs| |CodeQL| |PyPI| |DOI|
 
 blueetl-core
 ============
@@ -54,8 +54,8 @@ Citation
 
 When you use this software, we kindly ask you to cite the following DOI:
 
-.. image:: https://zenodo.org/badge/xxxxxxxx.svg
-   :target: https://zenodo.org/badge/latestdoi/xxxxxxxx
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.10277477.svg
+   :target: https://doi.org/10.5281/zenodo.10277477
 
 
 Acknowledgment
@@ -83,8 +83,16 @@ Copyright © 2023 Blue Brain Project/EPFL
    :target: https://blueetl-core.readthedocs.io/
    :alt: documentation status
 
-.. |DOI| image:: https://zenodo.org/badge/DOI/xxx/zenodo.yyy.svg
-   :target: https://doi.org/xxx/zenodo.yyy
+.. |CodeQL| image:: https://github.com/BlueBrain/blueetl-core/actions/workflows/github-code-scanning/codeql/badge.svg
+   :target: https://github.com/BlueBrain/blueetl-core/actions/workflows/github-code-scanning/codeql
+   :alt: CodeQL
+
+.. |PyPI| image:: https://github.com/BlueBrain/blueetl-core/actions/workflows/publish-sdist.yml/badge.svg
+   :target: https://pypi.org/project/blueetl-core/
+   :alt: PyPI
+
+.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.10277477.svg
+   :target: https://doi.org/10.5281/zenodo.10277477
    :alt: DOI
 
 .. local-substitutions
