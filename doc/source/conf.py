@@ -4,6 +4,8 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+import importlib.metadata
+
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -14,15 +16,12 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-from pkg_resources import get_distribution
-
-
 # -- Project information -----------------------------------------------------
 
 project = "blueetl-core"
 
 # The short X.Y version
-version = get_distribution("blueetl_core").version
+version = importlib.metadata.version("blueetl_core")
 
 # The full version, including alpha/beta/rc tags
 release = version

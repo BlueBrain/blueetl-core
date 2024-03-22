@@ -1,4 +1,5 @@
 """BlueETL core transformations."""
+
 import logging
 from typing import Optional, Union
 
