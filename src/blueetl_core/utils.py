@@ -1,4 +1,5 @@
 """Core utilities."""
+
 import operator
 from collections.abc import Callable, Mapping
 from copy import deepcopy

@@ -1,6 +1,18 @@
 Changelog
 =========
 
+Version 0.1.4
+-------------
+
+Improvements
+~~~~~~~~~~~~
+
+- Update github actions.
+- Split lint and docs jobs in the CI.
+- Remove tox-gh-actions in the CI.
+- Use tox-uv in the CI.
+- Update black formatting.
+
 Version 0.1.3
 -------------
 
