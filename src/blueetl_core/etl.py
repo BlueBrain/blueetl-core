@@ -305,6 +305,13 @@ class ETLDataFrameAccessor(ETLBaseAccessor[pd.DataFrame, DataFrameGroupBy]):
         ):
             yield named_index, dict(zip(columns, value))
 
+    def insert_columns(self, loc: int, columns: list, values: list) -> None:
+        """Insert multiple columns, similar to repeatedly calling DataFrame.insert()."""
+        if len(columns) != len(values):
+            raise ValueError("columns and values must have the same length")
+        for col, val in zip(reversed(columns), reversed(values)):
+            self._obj.insert(loc, col, val)
+
     def _query_list(self, query_list: list[dict[str, Any]]) -> pd.DataFrame:
         """Given a list of query dicts, return the DataFrame filtered by columns and index."""
         return query_frame(self._obj, query_list)

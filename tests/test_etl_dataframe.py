@@ -472,6 +472,27 @@ def test_iterdict(dataframe1):
     assert value == {"v0": 0, "v1": 4}
 
 
+def test_insert_columns(dataframe1):
+    columns = ["pre0", "pre1", "pre2"]
+    values = [111, [200, 201, 202, 203], np.nan]
+    original_columns = list(dataframe1.columns)
+
+    dataframe1.etl.insert_columns(loc=0, columns=columns, values=values)
+
+    assert_array_equal(dataframe1.columns, columns + original_columns)
+    assert_array_equal(dataframe1["pre0"], [111] * len(dataframe1))
+    assert_array_equal(dataframe1["pre1"], [200, 201, 202, 203])
+    assert_array_equal(dataframe1["pre2"], [np.nan] * len(dataframe1))
+
+
+def test_insert_columns_raises(dataframe1):
+    columns = ["pre0", "pre1", "pre2"]
+    values = [111]
+
+    with pytest.raises(ValueError, match="columns and values must have the same length"):
+        dataframe1.etl.insert_columns(loc=0, columns=columns, values=values)
+
+
 @pytest.mark.parametrize(
     "params, expected_key, expected_df",
     [

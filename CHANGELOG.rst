@@ -1,6 +1,20 @@
 Changelog
 =========
 
+Version 0.2.0
+-------------
+
+New Features
+~~~~~~~~~~~~
+
+- Add ``df.etl.insert_columns()`` to simplify the insertion of multiple columns at once in a DataFrame.
+
+Improvements
+~~~~~~~~~~~~
+
+- In ``run_parallel()``, automatically shutdown the processes created by joblib and loky.
+
+
 Version 0.1.8
 -------------
 
