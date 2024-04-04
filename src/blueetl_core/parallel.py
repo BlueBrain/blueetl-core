@@ -8,6 +8,7 @@ from typing import Any, Callable, Optional
 
 import numpy as np
 from joblib import Parallel, delayed
+from joblib.externals.loky import get_reusable_executor
 
 from blueetl_core.constants import (
     BLUEETL_JOBLIB_BACKEND,
@@ -73,6 +74,7 @@ def run_parallel(
     backend: Optional[str] = None,
     verbose: Optional[int] = None,
     base_seed: Optional[int] = None,
+    shutdown_executor: bool = True,
 ) -> list[Any]:
     """Run tasks in parallel.
 
@@ -87,6 +89,7 @@ def run_parallel(
         verbose: verbosity of joblib. If not specified, use the BLUEETL_JOBLIB_VERBOSE.
         base_seed: initial base seed. If specified, a different seed is added to the task context,
             and passed to each callable object.
+        shutdown_executor: if True and using loky, shutdown the subprocesses before returning.
 
     Returns:
         list of objects returned by the callable objects, in the same order.
@@ -100,15 +103,20 @@ def run_parallel(
         jobs = int(jobs_env) if jobs_env else max((os.cpu_count() or 1) // 2, 1)
     if not backend:
         backend = os.getenv(BLUEETL_JOBLIB_BACKEND)
-    parallel = Parallel(n_jobs=jobs, backend=backend, verbose=verbose)
-    return parallel(
-        delayed(task)(
-            ctx=TaskContext(
-                task_id=i,
-                loglevel=loglevel,
-                seed=None if base_seed is None else base_seed + i,
-                ppid=os.getpid(),
+    try:
+        parallel = Parallel(n_jobs=jobs, backend=backend, verbose=verbose)
+        return parallel(
+            delayed(task)(
+                ctx=TaskContext(
+                    task_id=i,
+                    loglevel=loglevel,
+                    seed=None if base_seed is None else base_seed + i,
+                    ppid=os.getpid(),
+                )
             )
+            for i, task in enumerate(tasks)
         )
-        for i, task in enumerate(tasks)
-    )
+    finally:
+        if shutdown_executor and (not backend or backend == "loky"):
+            # shutdown the pool of processes used by loky
+            get_reusable_executor().shutdown(wait=True)
