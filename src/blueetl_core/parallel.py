@@ -4,6 +4,7 @@ import logging
 import os
 from collections.abc import Iterable
 from dataclasses import dataclass
+from functools import partial
 from typing import Any, Callable, Optional
 
 import numpy as np
@@ -42,10 +43,9 @@ class Task:
 
     def _setup_logging(self, ctx: TaskContext) -> None:
         """Initialize logging in a subprocess."""
-        loglevel = os.getenv(BLUEETL_SUBPROCESS_LOGGING_LEVEL)
-        if loglevel:
-            logformat = f"%(asctime)s %(levelname)s %(name)s [task={ctx.task_id}]: %(message)s"
-            setup_logging(loglevel=loglevel, logformat=logformat, force=True)
+        loglevel = os.getenv(BLUEETL_SUBPROCESS_LOGGING_LEVEL) or ctx.loglevel
+        logformat = f"%(asctime)s %(levelname)s %(name)s [task={ctx.task_id}]: %(message)s"
+        setup_logging(loglevel=loglevel, logformat=logformat, force=True)
 
     @staticmethod
     def _setup_seed(ctx: TaskContext) -> None:
@@ -120,3 +120,34 @@ def run_parallel(
         if shutdown_executor and (not backend or backend == "loky"):
             # shutdown the pool of processes used by loky
             get_reusable_executor().shutdown(wait=True)
+
+
+def isolated(func):
+    """Isolate a function to be executed in a separate process.
+
+    - It uses loky instead of multiprocessing to be able to use joblib inside the subprocess.
+    - It can work as a decorator, if desired.
+
+    Args:
+        func (function): function to isolate.
+
+    Returns:
+        the isolated function.
+    """
+
+    def func_isolated(*args, **kwargs):
+        task = Task(partial(func, *args, **kwargs))
+        ctx = TaskContext(
+            task_id=0,
+            loglevel=L.getEffectiveLevel(),
+            seed=None,
+            ppid=os.getpid(),
+        )
+        executor = get_reusable_executor(max_workers=1, reuse=False)
+        try:
+            future = executor.submit(task, ctx)
+            return future.result()
+        finally:
+            executor.shutdown(wait=True)
+
+    return func_isolated

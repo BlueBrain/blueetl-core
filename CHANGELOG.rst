@@ -1,6 +1,19 @@
 Changelog
 =========
 
+Version 0.2.1
+-------------
+
+New Features
+~~~~~~~~~~~~
+
+- Add ``blueetl_core.parallel.isolated()`` to execute a function in a separate subprocess.
+
+Improvements
+~~~~~~~~~~~~
+
+- If the env variable ``BLUEETL_SUBPROCESS_LOGGING_LEVEL`` is empty or not defined, then the log level of the subprocesses is inherited from the parent.
+
 Version 0.2.0
 -------------
 
