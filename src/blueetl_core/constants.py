@@ -6,6 +6,7 @@
 # If not overridden, the value depends on logging: 0 if loglevel >= logging.WARNING else 10
 BLUEETL_JOBLIB_VERBOSE = "BLUEETL_JOBLIB_VERBOSE"
 # Number of concurrent jobs. If not overridden, it uses by default: os.cpu_count() // 2
+# If 1, do not use subprocesses (mainly for testing or debugging).
 BLUEETL_JOBLIB_JOBS = "BLUEETL_JOBLIB_JOBS"
 # JobLib backend (loky, multiprocessing, threading). If not overridden, it uses by default: loky
 BLUEETL_JOBLIB_BACKEND = "BLUEETL_JOBLIB_BACKEND"

@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.2.2
+-------------
+
+Improvements
+~~~~~~~~~~~~
+
+- In ``blueetl_core.parallel.isolated()``, execute the function in the same process if ``BLUEETL_JOBLIB_JOBS`` is set to ``1``.
+
 Version 0.2.1
 -------------
 

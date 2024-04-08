@@ -143,6 +143,9 @@ def isolated(func):
             seed=None,
             ppid=os.getpid(),
         )
+        if os.getenv(BLUEETL_JOBLIB_JOBS) == "1":
+            # execute the task in the current process and return the result
+            return task(ctx)
         executor = get_reusable_executor(max_workers=1, reuse=False)
         try:
             future = executor.submit(task, ctx)
