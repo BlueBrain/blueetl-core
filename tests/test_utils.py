@@ -125,6 +125,7 @@ def test_compare_empty_filter():
         ({}, {"key": 1}, False),
         ({"key": 1}, {}, True),
         ({"key": 1}, {"key": 1}, True),
+        ({"key": 1}, {"key": [1]}, True),
         ({"key": 1}, {"key": [1, 2]}, True),
         ({"key": 1}, {"key": {"isin": [1, 2]}}, True),
         ({"key": 1}, {"key": 2}, False),
@@ -155,8 +156,50 @@ def test_compare_empty_filter():
     ],
 )
 def test_is_subfilter(left, right, expected):
-    result = test_module.is_subfilter(left, right)
+    result = test_module.is_subfilter(left, right, strict=False)
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    "left, right, expected",
+    [
+        ({}, {}, False),
+        ({}, {"key": 1}, False),
+        ({"key": 1}, {}, True),
+        ({"key": 1}, {"key": 1}, False),
+        ({"key": 1}, {"key": [1]}, False),
+        ({"key": 1}, {"key": [1, 2]}, True),
+        ({"key": 1}, {"key": {"isin": [1, 2]}}, True),
+        ({"key": 1}, {"key": 2}, False),
+        ({"key": 1}, {"key": [2, 3]}, False),
+        ({"key": 1}, {"key": {"isin": [2, 3]}}, False),
+        ({"key1": 1, "key2": 2}, {"key1": 1}, True),
+        ({"key1": 1}, {"key1": 1, "key2": 2}, False),
+        ({"key": {"isin": [1, 2]}}, {"key": 1}, False),
+        ({"key": {"ne": 3}}, {"key": {"ne": 3}}, False),
+        ({"key": {"ne": 3}}, {"key": {"ne": 4}}, False),
+        ({"key": {"gt": 3}}, {"key": {"gt": 2}}, True),
+        ({"key": {"gt": 3}}, {"key": {"gt": 3}}, False),
+        ({"key": {"gt": 3}}, {"key": {"gt": 4}}, False),
+        ({"key": {"ge": 3}}, {"key": {"ge": 2}}, True),
+        ({"key": {"ge": 3}}, {"key": {"ge": 3}}, False),
+        ({"key": {"ge": 3}}, {"key": {"ge": 4}}, False),
+        ({"key": {"lt": 3}}, {"key": {"lt": 2}}, False),
+        ({"key": {"lt": 3}}, {"key": {"lt": 3}}, False),
+        ({"key": {"lt": 3}}, {"key": {"lt": 4}}, True),
+        ({"key": {"le": 3}}, {"key": {"le": 2}}, False),
+        ({"key": {"le": 3}}, {"key": {"le": 3}}, False),
+        ({"key": {"le": 3}}, {"key": {"le": 4}}, True),
+        ({"key": {"le": 3, "ge": 1}}, {"key": {"le": 4}}, True),
+        ({"key": {"le": 3, "ge": 1}}, {"key": {"le": 4, "ge": 0}}, True),
+        ({"key": 1}, {"key": {"eq": 1}}, False),
+        ({"key": 1}, {"key": {"eq": 1, "isin": [1, 2]}}, False),
+        ({"key": 1}, {"key": {"eq": 1, "isin": [2, 3]}}, False),
+    ],
+)
+def test_is_subfilter_strict(left, right, expected):
+    result = test_module.is_subfilter(left, right, strict=True)
+    assert result is expected
 
 
 def test_smart_concat_series(series1):
