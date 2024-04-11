@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.2.3
+-------------
+
+Improvements
+~~~~~~~~~~~~
+
+- In ``blueetl_core.utils.is_subfilter()``, add the ``strict`` parameter.
+
 Version 0.2.2
 -------------
 

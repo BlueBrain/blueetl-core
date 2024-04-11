@@ -132,20 +132,32 @@ def compare(obj: Union[pd.Series, pd.Index], value: Any) -> np.ndarray:
     return np.asarray(obj == value)
 
 
-def is_subfilter(left: dict, right: dict) -> bool:
+def is_subfilter(left: dict, right: dict, strict: bool = False) -> bool:
     """Return True if ``left`` is a subfilter of ``right``, False otherwise.
 
-    ``left`` is a subfilter of ``right`` if it's equal or more specific.
+    Args:
+        left: left filter dict.
+        right: right filter dict.
+        strict: if False, ``left`` is a subfilter of ``right`` if it's equal or more specific;
+            if True, ``left`` is a subfilter of ``right`` only if it's more specific.
 
     Examples:
         >>> print(is_subfilter({}, {}))
         True
+        >>> print(is_subfilter({}, {}, strict=True))
+        False
         >>> print(is_subfilter({}, {"key": 1}))
         False
         >>> print(is_subfilter({"key": 1}, {}))
         True
         >>> print(is_subfilter({"key": 1}, {"key": 1}))
         True
+        >>> print(is_subfilter({"key": 1}, {"key": 1}, strict=True))
+        False
+        >>> print(is_subfilter({"key": 1}, {"key": [1]}))
+        True
+        >>> print(is_subfilter({"key": 1}, {"key": [1]}, strict=True))
+        False
         >>> print(is_subfilter({"key": 1}, {"key": [1, 2]}))
         True
         >>> print(is_subfilter({"key": 1}, {"key": {"isin": [1, 2]}}))
@@ -178,7 +190,7 @@ def is_subfilter(left: dict, right: dict) -> bool:
         return {"isin": [obj]}
 
     def _is_subdict(d1: dict, d2: dict) -> bool:
-        """Return True if d1 is a subdict of d2."""
+        """Return True if d1 is a subdict of d2, or d1 and d2 are equal."""
         # mapping operator -> operation
         operators = {
             "ne": operator.eq,
@@ -201,14 +213,19 @@ def is_subfilter(left: dict, right: dict) -> bool:
         L.debug("unmatched keys: %s", sorted(unmatched_keys))
         return len(unmatched_keys) == 0
 
+    # keys present in left, but missing or different in right
+    difference = set(left)
     for key in right:
         if key not in left:
             return False
         dict_left = _to_dict(left[key])
         dict_right = _to_dict(right[key])
+        if strict and dict_left == dict_right:
+            difference.remove(key)
+            continue
         if not _is_subdict(dict_left, dict_right):
             return False
-    return True
+    return not strict or len(difference) > 0
 
 
 def smart_concat(iterable, *, keys=None, copy=False, skip_empty=True, **kwargs):
