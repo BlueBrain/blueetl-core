@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.2.4
+-------------
+
+Bug fixes
+~~~~~~~~~
+
+- Do not call ``get_reusable_executor().shutdown()`` when tasks are run serially in ``run_parallel()``.
+
 Version 0.2.3
 -------------
 

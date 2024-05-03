@@ -117,7 +117,7 @@ def run_parallel(
             for i, task in enumerate(tasks)
         )
     finally:
-        if shutdown_executor and (not backend or backend == "loky"):
+        if shutdown_executor and (not backend or backend == "loky") and jobs != 1:
             # shutdown the pool of processes used by loky
             get_reusable_executor().shutdown(wait=True)
 
