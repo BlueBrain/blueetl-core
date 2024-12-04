@@ -100,6 +100,7 @@ class ETLBaseAccessor(ABC, Generic[PandasT, PandasGroupByT]):
         self,
         conditions: Union[str, list[str]],
         values: Any,
+        *,
         inner: bool = False,
         drop: bool = False,
         dtypes: Any = None,
