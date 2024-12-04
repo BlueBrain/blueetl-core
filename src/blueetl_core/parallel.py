@@ -70,6 +70,7 @@ class Task:
 
 def run_parallel(
     tasks: Iterable[Callable[[TaskContext], Any]],
+    *,
     jobs: Optional[int] = None,
     backend: Optional[str] = None,
     verbose: Optional[int] = None,
